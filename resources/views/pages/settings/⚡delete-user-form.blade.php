@@ -1,7 +1,9 @@
 <?php
 
 use App\Concerns\PasswordValidationRules;
+use App\Enums\UserRole;
 use App\Livewire\Actions\Logout;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -15,11 +17,20 @@ new class extends Component {
      */
     public function deleteUser(Logout $logout): void
     {
+        abort_unless(Auth::user()->role === UserRole::SuperAdmin, 403);
+
         $this->validate([
             'password' => $this->currentPasswordRules(),
         ]);
 
-        tap(Auth::user(), $logout(...))->delete();
+        $user = Auth::user();
+
+        AuditLog::record('user_delete', 'Akun dihapus: ' . $user->email, [
+            'deleted_user_id' => $user->id,
+            'deleted_user_email' => $user->email,
+        ]);
+
+        tap($user, $logout(...))->delete();
 
         $this->redirect('/', navigate: true);
     }

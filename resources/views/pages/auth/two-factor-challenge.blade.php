@@ -25,15 +25,15 @@
         >
             <div x-show="!showRecoveryInput">
                 <x-auth-header
-                    :title="__('Authentication Code')"
-                    :description="__('Enter the authentication code provided by your authenticator application.')"
+                    :title="__('Kode Autentikasi')"
+                    :description="__('Masukkan kode autentikasi dari aplikasi authenticator Anda.')"
                 />
             </div>
 
             <div x-show="showRecoveryInput">
                 <x-auth-header
-                    :title="__('Recovery Code')"
-                    :description="__('Please confirm access to your account by entering one of your emergency recovery codes.')"
+                    :title="__('Kode Pemulihan')"
+                    :description="__('Masukkan salah satu kode pemulihan darurat Anda untuk mengakses akun.')"
                 />
             </div>
 
@@ -47,7 +47,7 @@
                                 x-model="code"
                                 length="6"
                                 name="code"
-                                label="OTP Code"
+                                label="Kode OTP"
                                 label:sr-only
                                 class="mx-auto"
                              />
@@ -78,15 +78,15 @@
                         type="submit"
                         class="w-full"
                     >
-                        {{ __('Continue') }}
+                        {{ __('Lanjutkan') }}
                     </flux:button>
                 </div>
 
                 <div class="mt-5 space-x-0.5 text-sm leading-5 text-center">
-                    <span class="opacity-50">{{ __('or you can') }}</span>
+                    <span class="opacity-50">{{ __('atau Anda dapat') }}</span>
                     <div class="inline font-medium underline cursor-pointer opacity-80">
-                        <span x-show="!showRecoveryInput" @click="toggleInput()">{{ __('login using a recovery code') }}</span>
-                        <span x-show="showRecoveryInput" @click="toggleInput()">{{ __('login using an authentication code') }}</span>
+                        <span x-show="!showRecoveryInput" @click="toggleInput()">{{ __('login dengan kode pemulihan') }}</span>
+                        <span x-show="showRecoveryInput" @click="toggleInput()">{{ __('login dengan kode autentikasi') }}</span>
                     </div>
                 </div>
             </form>

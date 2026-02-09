@@ -144,14 +144,10 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Registration disabled for public - only super admin can create users
+        // Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
-        Features::twoFactorAuthentication([
-            'confirm' => true,
-            'confirmPassword' => true,
-            // 'window' => 0
-        ]),
     ],
 
 ];

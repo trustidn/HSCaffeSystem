@@ -43,8 +43,8 @@ test('email verification status is unchanged when email address is unchanged', f
     expect($user->refresh()->email_verified_at)->not->toBeNull();
 });
 
-test('user can delete their account', function () {
-    $user = User::factory()->create();
+test('super admin can delete their account', function () {
+    $user = User::factory()->create(['role' => \App\Enums\UserRole::SuperAdmin]);
 
     $this->actingAs($user);
 
@@ -60,8 +60,21 @@ test('user can delete their account', function () {
     expect(auth()->check())->toBeFalse();
 });
 
+test('non super admin cannot delete their account', function () {
+    $user = User::factory()->create(['role' => \App\Enums\UserRole::Owner]);
+
+    $this->actingAs($user);
+
+    Livewire::test('pages::settings.delete-user-form')
+        ->set('password', 'password')
+        ->call('deleteUser')
+        ->assertForbidden();
+
+    expect($user->fresh())->not->toBeNull();
+});
+
 test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['role' => \App\Enums\UserRole::SuperAdmin]);
 
     $this->actingAs($user);
 
