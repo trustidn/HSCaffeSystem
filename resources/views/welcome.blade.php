@@ -1,19 +1,19 @@
 @use('Illuminate\Support\Facades\Storage')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $siteName ?? 'HsCaffeSystem' }} - Sistem Manajemen Cafe Multi-Tenant</title>
     @if (! empty($siteFavicon))
         <link rel="icon" href="{{ Storage::url($siteFavicon) }}" type="image/png">
     @else
         <link rel="icon" href="/favicon.ico" sizes="any">
     @endif
-    <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800&family=space-grotesk:400,500,600,700" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
+        <style>
         body { font-family: 'Inter', system-ui, sans-serif; }
         .font-display { font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif; }
         .gradient-text {
@@ -64,8 +64,8 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), rgba(99, 102, 241, 0.3), transparent);
         }
-    </style>
-</head>
+        </style>
+    </head>
 <body class="mesh-bg noise-overlay min-h-screen text-zinc-200 antialiased">
 
     {{-- Navigation --}}
@@ -80,7 +80,7 @@
                 <span class="font-display text-lg font-semibold tracking-tight text-white">{{ $siteName ?? 'HsCaffeSystem' }}</span>
             </a>
             <div class="flex items-center gap-3">
-                @if (Route::has('login'))
+            @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/dashboard') }}" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-500/25 transition-all hover:shadow-xl hover:shadow-violet-500/35 hover:brightness-110">
                             Dashboard
@@ -95,7 +95,7 @@
                 @endif
             </div>
         </div>
-    </nav>
+                </nav>
 
     {{-- Hero Section --}}
     <section class="relative overflow-hidden">
@@ -135,7 +135,7 @@
                         Hubungi Kami
                         <svg class="size-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
                     </a>
-                @endif
+            @endif
                 <a href="#fitur" class="inline-flex items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.04] px-9 py-4 text-sm font-semibold text-zinc-300 backdrop-blur-sm transition-all hover:border-white/15 hover:bg-white/[0.08] hover:text-white">
                     Lihat Fitur
                     <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
@@ -329,9 +329,9 @@
                                     <li class="flex items-start gap-3 text-sm text-zinc-400">
                                         <svg class="mt-0.5 size-4 shrink-0 {{ $isBest ? 'text-violet-400' : 'text-emerald-400' }}" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
                                         {{ $feature }}
-                                    </li>
+                        </li>
                                 @endforeach
-                            </ul>
+                    </ul>
                         @else
                             <div class="flex-1"></div>
                         @endif
@@ -422,7 +422,7 @@
                             <svg class="size-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
                         </a>
                     @endif
-                    @if (Route::has('login'))
+        @if (Route::has('login'))
                         <a href="{{ route('login') }}" class="inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.08] px-9 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/25 hover:bg-white/[0.12]">
                             Masuk ke Dashboard
                             <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
@@ -442,7 +442,7 @@
                         <img src="{{ Storage::url($siteLogo) }}" alt="{{ $siteName ?? 'HsCaffeSystem' }}" class="h-7 w-7 rounded-lg object-contain" />
                     @else
                         <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-500 text-xs font-bold text-white">HS</div>
-                    @endif
+        @endif
                     <span class="font-display text-sm font-medium text-zinc-400">{{ $siteName ?? 'HsCaffeSystem' }}</span>
                 </div>
                 <p class="text-sm text-zinc-600">&copy; {{ date('Y') }} {{ $siteName ?? 'HsCaffeSystem' }}. All rights reserved.</p>
@@ -450,5 +450,5 @@
         </div>
     </footer>
 
-</body>
+    </body>
 </html>
