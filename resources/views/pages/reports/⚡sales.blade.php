@@ -2,6 +2,7 @@
 
 use App\Enums\PaymentStatus;
 use App\Enums\StockMovementType;
+use App\Models\Category;
 use App\Models\Ingredient;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -13,9 +14,14 @@ use Livewire\Component;
 
 new #[Title('Laporan')] class extends Component {
     public string $activeTab = 'sales';
+
     public string $period = 'today';
+
     public string $startDate = '';
+
     public string $endDate = '';
+
+    public string $topItemsCategoryId = '';
 
     public function mount(): void
     {
@@ -52,15 +58,30 @@ new #[Title('Laporan')] class extends Component {
     }
 
     #[Computed]
+    public function menuCategories(): \Illuminate\Support\Collection
+    {
+        return Category::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+    }
+
+    #[Computed]
     public function topItems(): \Illuminate\Support\Collection
     {
-        return OrderItem::query()
+        $query = OrderItem::query()
             ->selectRaw('item_name, SUM(quantity) as total_qty, SUM(subtotal) as total_revenue')
             ->whereHas('order', fn ($q) => $q
                 ->where('tenant_id', auth()->user()->tenant_id)
                 ->where('payment_status', PaymentStatus::Paid->value)
                 ->whereBetween('created_at', [$this->startDate.' 00:00:00', $this->endDate.' 23:59:59'])
-            )
+            );
+
+        if ($this->topItemsCategoryId !== '') {
+            $query->whereHas('menuItem', fn ($q) => $q->where('category_id', $this->topItemsCategoryId));
+        }
+
+        return $query
             ->groupBy('item_name')
             ->orderByDesc('total_qty')
             ->limit(10)
@@ -192,6 +213,15 @@ new #[Title('Laporan')] class extends Component {
         </div>
 
     @elseif ($activeTab === 'items')
+        <div class="mb-4 flex flex-wrap items-center gap-3">
+            <flux:text class="shrink-0">{{ __('Kategori:') }}</flux:text>
+            <flux:select wire:model.live="topItemsCategoryId" class="min-w-[200px]">
+                <option value="">{{ __('Semua Kategori') }}</option>
+                @foreach ($this->menuCategories as $cat)
+                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                @endforeach
+            </flux:select>
+        </div>
         <div class="overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-700">
             <table class="w-full text-left text-sm">
                 <thead class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
@@ -305,7 +335,11 @@ new #[Title('Laporan')] class extends Component {
                 <flux:heading size="lg" class="mb-4">{{ __('Ringkasan Pergerakan Stok') }}</flux:heading>
                 <div class="grid gap-3 md:grid-cols-3">
                     @foreach ($this->stockMovementSummary as $movement)
-                        @php $type = \App\Enums\StockMovementType::from($movement->type); @endphp
+                        @php
+                            $type = $movement->type instanceof \App\Enums\StockMovementType
+                                ? $movement->type
+                                : \App\Enums\StockMovementType::from($movement->type);
+                        @endphp
                         <div class="flex items-center justify-between rounded-lg border border-zinc-100 p-4 dark:border-zinc-700">
                             <div>
                                 <flux:badge :variant="$type->color()" size="sm">{{ $type->label() }}</flux:badge>

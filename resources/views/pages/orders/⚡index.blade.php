@@ -3,6 +3,7 @@
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
+use App\Models\Table;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -12,7 +13,11 @@ new #[Title('Pesanan')] class extends Component {
     use WithPagination;
 
     public string $filterStatus = '';
+
     public string $filterPayment = '';
+
+    public string $filterTable = '';
+
     public string $search = '';
     public string $sortBy = 'created_at';
     public string $sortDirection = 'desc';
@@ -42,6 +47,17 @@ new #[Title('Pesanan')] class extends Component {
         $this->resetPage();
     }
 
+    public function updatedFilterTable(): void
+    {
+        $this->resetPage();
+    }
+
+    #[Computed]
+    public function tables(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Table::orderBy('number')->get();
+    }
+
     public function sort(string $column): void
     {
         $allowed = ['order_number', 'type', 'total', 'status', 'payment_status', 'created_at'];
@@ -68,6 +84,13 @@ new #[Title('Pesanan')] class extends Component {
             ->with(['table', 'customer', 'cashier', 'items'])
             ->when($this->filterStatus, fn ($q) => $q->where('status', $this->filterStatus))
             ->when($this->filterPayment, fn ($q) => $q->where('payment_status', $this->filterPayment))
+            ->when($this->filterTable !== '', function ($q) {
+                if ($this->filterTable === 'none') {
+                    $q->whereNull('table_id');
+                } else {
+                    $q->where('table_id', $this->filterTable);
+                }
+            })
             ->when($this->search, fn ($q) => $q->where('order_number', 'like', '%'.$this->search.'%'))
             ->orderBy($this->sortBy, $this->sortDirection)
             ->orderBy('id', $this->sortDirection)
@@ -184,6 +207,13 @@ new #[Title('Pesanan')] class extends Component {
             <option value="">{{ __('Semua Bayar') }}</option>
             @foreach (PaymentStatus::cases() as $ps)
                 <option value="{{ $ps->value }}">{{ $ps->label() }}</option>
+            @endforeach
+        </flux:select>
+        <flux:select wire:model.live="filterTable" class="w-40">
+            <option value="">{{ __('Semua Meja') }}</option>
+            <option value="none">{{ __('Tanpa meja') }}</option>
+            @foreach ($this->tables as $table)
+                <option value="{{ $table->id }}">{{ __('Meja') }} {{ $table->number }}</option>
             @endforeach
         </flux:select>
     </div>
