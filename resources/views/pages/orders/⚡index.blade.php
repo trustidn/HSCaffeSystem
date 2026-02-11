@@ -347,13 +347,13 @@ new #[Title('Pesanan')] class extends Component {
                 <div class="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
                     <flux:text size="sm" class="mb-2 font-medium text-zinc-600 dark:text-zinc-400">{{ __('Cetak') }}</flux:text>
                     <div class="flex flex-wrap gap-2">
-                        <flux:button :href="route('orders.print.waiter', $this->selectedOrder->id)" target="_blank" rel="noopener" variant="ghost" size="sm" icon="document-text">
+                        <flux:button :href="route('orders.print.waiter', $this->selectedOrder->id) . '?auto=1'" target="_blank" rel="noopener" variant="ghost" size="sm" icon="document-text">
                             {{ __('Waitres') }}
                         </flux:button>
-                        <flux:button :href="route('orders.print.kitchen', $this->selectedOrder->id)" target="_blank" rel="noopener" variant="ghost" size="sm" icon="fire">
+                        <flux:button :href="route('orders.print.kitchen', $this->selectedOrder->id) . '?auto=1'" target="_blank" rel="noopener" variant="ghost" size="sm" icon="fire">
                             {{ __('Dapur') }}
                         </flux:button>
-                        <flux:button :href="route('orders.print.receipt', $this->selectedOrder->id)" target="_blank" rel="noopener" variant="ghost" size="sm" icon="banknotes">
+                        <flux:button :href="route('orders.print.receipt', $this->selectedOrder->id) . '?auto=1'" target="_blank" rel="noopener" variant="ghost" size="sm" icon="banknotes">
                             {{ __('Struk') }}
                         </flux:button>
                     </div>
