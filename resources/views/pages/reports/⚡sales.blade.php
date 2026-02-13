@@ -246,6 +246,15 @@ new #[Title('Laporan')] class extends Component {
                         </tr>
                     @endforelse
                 </tbody>
+                @if ($this->topItems->isNotEmpty())
+                    <tfoot class="border-t-2 border-zinc-300 bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800">
+                        <tr>
+                            <td colspan="2" class="px-4 py-3 font-bold">{{ __('Total Revenue') }}</td>
+                            <td class="px-4 py-3 text-right font-bold">{{ $this->topItems->sum('total_qty') }}</td>
+                            <td class="px-4 py-3 text-right font-bold text-emerald-600">Rp {{ number_format($this->topItems->sum('total_revenue'), 0, ',', '.') }}</td>
+                        </tr>
+                    </tfoot>
+                @endif
             </table>
         </div>
 
